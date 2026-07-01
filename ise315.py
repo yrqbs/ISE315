@@ -21,7 +21,8 @@ menu = st.sidebar.radio("Select Analysis Tool:", [
     "Inference for Two Samples (Ch 10)",
     "Simple Linear Regression (Ch 11)", 
     "Multiple Linear Regression (Ch 12)", 
-    "One-Way ANOVA (Ch 13)"
+    "One-Way ANOVA (Ch 13)",
+    "Course Resources & Grade Calculator 📚"  # الخيار الجديد
 ])
 
 # --- Global Helper Function for Data Input ---
@@ -310,6 +311,67 @@ elif menu == "One-Way ANOVA (Ch 13)":
                     st.info(f"**Fail to Reject Null Hypothesis** (p-value = {p_val:.4f}).")
 
 # ==========================================
+# 6. Course Resources & Grade Calculator
+# ==========================================
+elif menu == "Course Resources & Grade Calculator 📚":
+    st.header("📚 Course Resources & Grade Calculator")
+    
+    col1, col2 = st.columns([1, 1])
+    
+    with col1:
+        st.subheader("📖 Official Textbooks")
+        st.markdown("**Primary Textbook:**")
+        st.info("D.C. Montgomery and C. Runger, *Applied Statistics and Probability for Engineers*, 6th Edition, 2013.")
+        
+        st.markdown("**Reference Book:**")
+        st.write("R. Walpole and R.H. Mayers, *Probability and Statistics for Engineers and Scientists*, 9th Edition, 2011.")
+        
+        st.markdown("---")
+        st.subheader("📝 Formula Sheets")
+        st.write("All required formulas for Chapters 8-14 are already integrated into the interactive tabs. Just click the **'ℹ️ Popovers'** in any analysis section to view the exact formulas used in the exams.")
+
+    with col2:
+        # 1. حاسبة الدرجات مع سيناريوهين (Best Case / Worst Case)
+        st.subheader("🧮 ISE 315 Grade Calculator (Customized)")
+        st.write("Calculate based on your raw exam scores and estimated curve impact.")
+        
+        with st.container(border=True):
+            # درجات الاختبارات (Raw - لا تتغير)
+            major1 = st.number_input("First Exam (28%)", min_value=0.0, max_value=28.0, value=25.0)
+            major2 = st.number_input("Second Exam (28%)", min_value=0.0, max_value=28.0, value=26.0)
+            final_exam = st.number_input("Final Exam (30%)", min_value=0.0, max_value=30.0, value=28.0)
+            
+            # درجات الحضور والواجبات (Normalized - هنا التغير)
+            st.markdown("---")
+            st.caption("Attendance & Homework (14% total) are subject to normalization.")
+            att_hw_raw = st.number_input("Your Raw Att & HW Score (out of 14)", min_value=0.0, max_value=14.0, value=12.0)
+            
+            # حساب أسوأ وأحسن الحالات (نفرض هامش 15% تأثر بالكيرف)
+            worst_att_hw = att_hw_raw * 0.85 
+            best_att_hw = min(14.0, att_hw_raw * 1.15)
+            
+            # حساب المجموع
+            total_worst = major1 + major2 + final_exam + worst_att_hw
+            total_best = major1 + major2 + final_exam + best_att_hw
+            
+            # دالة لتحويل المجموع إلى قريد
+            def get_grade(score):
+                if score >= 95.0: return "A+"
+                elif score >= 86.0: return "A"
+                elif score >= 81.0: return "B+"
+                elif score >= 76.0: return "B"
+                elif score >= 71.0: return "C+"
+                elif score >= 65.0: return "C"
+                elif score >= 60.0: return "D+"
+                elif score >= 55.0: return "D"
+                else: return "F"
+
+            st.markdown("#### 🎯 Expected Results:")
+            col_a, col_b = st.columns(2)
+            col_a.metric("Worst Case (Low Curve)", f"{total_worst:.1f}", get_grade(total_worst))
+            col_b.metric("Best Case (High Curve)", f"{total_best:.1f}", get_grade(total_best))
+            
+            st.caption("*Best/Worst cases estimate the impact of normalization on your Attendance & HW.*")
 # Footer / Credits
 # ==========================================
 st.markdown("<br><br>", unsafe_allow_html=True)
