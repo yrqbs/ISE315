@@ -335,7 +335,7 @@ elif menu == "Grade Calculator 🧮":
             final_p = st.number_input("Final Exam (%)", 0.0, 100.0, 0.0)
             hw_p = st.number_input("HW Raw Score (%)", 0.0, 100.0, 0.0)
             att_p = st.number_input("Attendance Raw Score (%)", 0.0, 100.0, 0.0)
-            curve = st.slider("Normalization Impact (%)", -10, 10, 0.0)
+            curve = st.slider("Normalization Impact (%)", -10.0, 10.0, 0.0)
     with col2:
         st.subheader("📊 Your Performance Dashboard")
         
