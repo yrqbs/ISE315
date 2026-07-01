@@ -360,21 +360,15 @@ elif menu == "Grade Calculator 🧮":
        # التعديل: استخدام ألوان متوافقة مع الـ Dark Mode
         # استخدمنا ألوان متباينة (Contrast) مع خلفية داكنة خفيفة
      # يجب أن ينتهي الكود بهذا السطر تحديداً:
+  # انسخ هذا الجزء بالكامل واستبدل أي شيء مشابه له في ملفك
         st.markdown(f"""
-        <div style="
-            background-color: #262730; 
-            padding: 25px; 
-            border-radius: 15px; 
-            text-align: center; 
-            border: 1px solid #4a4a4a;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-            
+        <div style="background-color: #262730; padding: 25px; border-radius: 15px; text-align: center; border: 1px solid #4a4a4a;">
             <p style="color: #ffffff; font-size: 18px; margin-bottom: 5px;">Total Score</p>
             <h1 style="color: {color}; font-size: 45px; margin: 0;">{total:.1f} / 100</h1>
             <h2 style="color: #ffffff; margin-top: 10px;">Grade: {grade}</h2>
             <p style="color: #cccccc; font-style: italic; margin-top: 10px;">{feedback}</p>
         </div>
-        """, unsafe_allow_html=True)  # <--- هذا الجزء هو السر!
+        """, unsafe_allow_html=True)
         # شريط تقدم (Progress Bar)
         st.progress(min(total/100, 1.0))
         
