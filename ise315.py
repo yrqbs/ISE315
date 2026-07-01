@@ -15,14 +15,14 @@ st.markdown("##### *Your A+ in ISE 315*")
 st.markdown("---")
 
 # --- Sidebar Navigation ---
-st.sidebar.title("Navigation")
-menu = st.sidebar.radio("Select Analysis Tool:", [
+menu = st.sidebar.radio("Navigation:", [
     "Descriptive Statistics", 
     "Inference for Two Samples (Ch 10)",
     "Simple Linear Regression (Ch 11)", 
     "Multiple Linear Regression (Ch 12)", 
-    "One-Way ANOVA (Ch 13)",
-    "Course Resources & Grade Calculator 📚"  # الخيار الجديد
+    "One-Way ANOVA (Ch 13)",      # صفحة الواجبات
+    "Course Resources 📚",       # صفحة المصادر
+    "Grade Calculator 🧮"        # صفحة الحاسبة
 ])
 
 # --- Global Helper Function for Data Input ---
@@ -310,64 +310,73 @@ elif menu == "One-Way ANOVA (Ch 13)":
                 else:
                     st.info(f"**Fail to Reject Null Hypothesis** (p-value = {p_val:.4f}).")
 
+
+#===============================================
+elif menu == "Course Resources 📚":
+    st.header("📚 Course Resources")
+    # هنا حط كود الروابط (الكتاب والفورملا شيت) فقط
+    st.link_button("Home work",'')
+    st.link_button("📖 Textbook", "رابط_الكتاب")
+    st.link_button("📝 Formula Sheet", "رابط_الفورملا")
+    st.link_button('All Resources','')
 # ==========================================
 # 6. Course Resources & Grade Calculator
 # ==========================================
-elif menu == "Course Resources & Grade Calculator 📚":
-    st.header("📚 Course Resources & Grade Calculator")
+elif menu == "Grade Calculator 🧮":
+    st.header("🧮 ISE 315 Grade Calculator")
     
     col1, col2 = st.columns([1, 1])
     
     with col1:
-        st.subheader("📖 Official Textbooks")
-        st.markdown("**Primary Textbook:**")
-        st.info("D.C. Montgomery and C. Runger, *Applied Statistics and Probability for Engineers*, 6th Edition, 2013.")
-        
-        st.markdown("**Reference Book:**")
-        st.write("R. Walpole and R.H. Mayers, *Probability and Statistics for Engineers and Scientists*, 9th Edition, 2011.")
-        
-        st.markdown("---")
-        st.subheader("📝 Formula Sheets")
-        st.write("All required formulas for Chapters 8-14 are already integrated into the interactive tabs. Just click the **'ℹ️ Popovers'** in any analysis section to view the exact formulas used in the exams.")
-
-    with col2:
-       # 1. حاسبة الدرجات المحدثة (تدعم النسبة المئوية)
-        st.subheader("🧮 ISE 315 Grade Calculator (Percentage Based)")
-        st.write("Enter your percentage for each category to calculate your total.")
-        
+        st.subheader("Enter Your Scores (%)")
         with st.container(border=True):
-            # إدخال الدرجات كنسب مئوية
             m1_p = st.number_input("First Exam (%)", 0.0, 100.0, 78.5)
             m2_p = st.number_input("Second Exam (%)", 0.0, 100.0, 81.0)
             final_p = st.number_input("Final Exam (%)", 0.0, 100.0, 88.0)
-            
-            # الدرجات التي تخضع للنورماليزيشن (أدخلها كنسبة من 100)
-            st.markdown("---")
-            st.caption("Attendance & HW are normalized (Enter your raw %):")
             hw_p = st.number_input("HW Raw Score (%)", 0.0, 100.0, 99.3)
             att_p = st.number_input("Attendance Raw Score (%)", 0.0, 100.0, 67.2)
-            
-            # حساب الأوزان (الاختبارات ثابتة، والواجبات والحضور متغيرة)
-            major_total = (m1_p * 0.28) + (m2_p * 0.28) + (final_p * 0.30)
-            
-            # تطبيق هامش الكيرف على الواجبات والحضور (السيناريو الحالي)
-            curve_factor = st.slider("Normalization/Curve Impact (%)", -10, 10, 0, help="Drag left if curve was harsh, right if generous.")
-            att_hw_total = ((hw_p * 0.10) + (att_p * 0.04)) * (1 + curve_factor/100)
-            
-            total_score = major_total + att_hw_total
-            
-            # دالة القريد
-            def get_grade(score):
-                if score >= 95.0: return "A+"
-                elif score >= 86.0: return "A"
-                elif score >= 81.0: return "B+"
-                elif score >= 76.0: return "B"
-                elif score >= 71.0: return "C+"
-                elif score >= 65.0: return "C"
-                else: return "F"
+            curve = st.slider("Normalization Impact (%)", -10, 10, 0)
+  with col2:
+        st.subheader("📊 Your Performance Dashboard")
+        
+        # حساب المجموع الكلي
+        major_total = (m1_p * 0.28) + (m2_p * 0.28) + (final_p * 0.30)
+        att_hw_total = ((hw_p * 0.10) + (att_p * 0.04)) * (1 + curve/100)
+        total = major_total + att_hw_total
+        
+        # نظام القريدات مع تفاصيل دقيقة
+        def get_grade_details(s):
+            if s >= 95: return "A+", "Excellent - Keep it up!", "green"
+            if s >= 86: return "A", "Very Good - Great work!", "green"
+            if s >= 81: return "B+", "Good - Solid performance!", "blue"
+            if s >= 76: return "B", "Above Average - Doing well!", "blue"
+            if s >= 71: return "C+", "Average - Stay focused!", "orange"
+            if s >= 65: return "C", "Pass - Needs more effort!", "red"
+            return "F", "Fail - Please contact your professor!", "red"
 
-            st.markdown("#### 🎯 Your Calculated Total")
-            st.metric("Final Score", f"{total_score:.1f} / 100", get_grade(total_score))
+        grade, feedback, color = get_grade_details(total)
+        
+        # العرض البصري الجميل
+        st.markdown(f"""
+        <div style="background-color: #f0f2f6; padding: 20px; border-radius: 10px; text-align: center;">
+            <h2 style="color: {color};">Total Score: {total:.1f} / 100</h2>
+            <h1>Grade: {grade}</h1>
+            <p style="font-style: italic;">{feedback}</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # شريط تقدم (Progress Bar)
+        st.progress(min(total/100, 1.0))
+        
+        st.write("---")
+        # الـ Z-Score الاختياري
+        with st.expander("📊 Check your Z-Score (Optional)"):
+            raw = st.number_input("Raw Score", 0.0, 100.0, float(total))
+            avg = st.number_input("Section Mean", 0.0, 100.0, 70.0)
+            std = st.number_input("Std Dev", 0.1, 20.0, 5.0)
+            z = (raw-avg)/std
+            st.metric("Z-Score Result", f"{z:.2f}")
+            if z > 1: st.write("You are in the top tier of your section! 🚀")
 # Footer / Credits
 # ==========================================
 st.markdown("<br><br>", unsafe_allow_html=True)
