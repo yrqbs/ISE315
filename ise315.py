@@ -336,7 +336,7 @@ elif menu == "Grade Calculator 🧮":
             hw_p = st.number_input("HW Raw Score (%)", 0.0, 100.0, 99.3)
             att_p = st.number_input("Attendance Raw Score (%)", 0.0, 100.0, 67.2)
             curve = st.slider("Normalization Impact (%)", -10, 10, 0)
-  with col2:
+    with col2:
         st.subheader("📊 Your Performance Dashboard")
         
         # حساب المجموع الكلي
