@@ -11,6 +11,7 @@ st.set_page_config(page_title="ISE 315 Statistics Hub", page_icon="📈", layout
 
 st.title("📈 ISE 315 Statistics Hub")
 st.write("An interactive statistical analysis tool for Engineering Statistics.")
+st.markdown("##### *Your A+ in ISE 315*")
 st.markdown("---")
 
 # --- Sidebar Navigation ---
