@@ -359,6 +359,7 @@ elif menu == "Grade Calculator 🧮":
         # العرض البصري الجميل
        # التعديل: استخدام ألوان متوافقة مع الـ Dark Mode
         # استخدمنا ألوان متباينة (Contrast) مع خلفية داكنة خفيفة
+     # يجب أن ينتهي الكود بهذا السطر تحديداً:
         st.markdown(f"""
         <div style="
             background-color: #262730; 
@@ -373,7 +374,7 @@ elif menu == "Grade Calculator 🧮":
             <h2 style="color: #ffffff; margin-top: 10px;">Grade: {grade}</h2>
             <p style="color: #cccccc; font-style: italic; margin-top: 10px;">{feedback}</p>
         </div>
-        """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)  # <--- هذا الجزء هو السر!
         # شريط تقدم (Progress Bar)
         st.progress(min(total/100, 1.0))
         
