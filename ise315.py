@@ -315,9 +315,9 @@ elif menu == "One-Way ANOVA (Ch 13)":
 elif menu == "Course Resources 📚":
     st.header("📚 Course Resources")
     # هنا حط كود الروابط (الكتاب والفورملا شيت) فقط
-    st.link_button("Home work",'')
-    st.link_button("📖 Textbook", "رابط_الكتاب")
-    st.link_button("📝 Formula Sheet", "رابط_الفورملا")
+  #  st.link_button("Home work",'')
+  #  st.link_button("📖 Textbook", "رابط_الكتاب")
+  #  st.link_button("📝 Formula Sheet", "رابط_الفورملا")
     st.link_button('All Resources','https://drive.google.com/drive/folders/1bzneQWBdPb00j2qNSZgLXlQ3GYdcgyzU')
 # ==========================================
 # 6. Course Resources & Grade Calculator
