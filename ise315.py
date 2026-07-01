@@ -331,30 +331,32 @@ elif menu == "Course Resources & Grade Calculator 📚":
         st.write("All required formulas for Chapters 8-14 are already integrated into the interactive tabs. Just click the **'ℹ️ Popovers'** in any analysis section to view the exact formulas used in the exams.")
 
     with col2:
-        # 1. حاسبة الدرجات مع سيناريوهين (Best Case / Worst Case)
-        st.subheader("🧮 ISE 315 Grade Calculator (Customized)")
-        st.write("Calculate based on your raw exam scores and estimated curve impact.")
+       # 1. حاسبة الدرجات المحدثة (تدعم النسبة المئوية)
+        st.subheader("🧮 ISE 315 Grade Calculator (Percentage Based)")
+        st.write("Enter your percentage for each category to calculate your total.")
         
         with st.container(border=True):
-            # درجات الاختبارات (Raw - لا تتغير)
-            major1 = st.number_input("First Exam (28%)", min_value=0.0, max_value=28.0, value=25.0)
-            major2 = st.number_input("Second Exam (28%)", min_value=0.0, max_value=28.0, value=26.0)
-            final_exam = st.number_input("Final Exam (30%)", min_value=0.0, max_value=30.0, value=28.0)
+            # إدخال الدرجات كنسب مئوية
+            m1_p = st.number_input("First Exam (%)", 0.0, 100.0, 78.5)
+            m2_p = st.number_input("Second Exam (%)", 0.0, 100.0, 81.0)
+            final_p = st.number_input("Final Exam (%)", 0.0, 100.0, 88.0)
             
-            # درجات الحضور والواجبات (Normalized - هنا التغير)
+            # الدرجات التي تخضع للنورماليزيشن (أدخلها كنسبة من 100)
             st.markdown("---")
-            st.caption("Attendance & Homework (14% total) are subject to normalization.")
-            att_hw_raw = st.number_input("Your Raw Att & HW Score (out of 14)", min_value=0.0, max_value=14.0, value=12.0)
+            st.caption("Attendance & HW are normalized (Enter your raw %):")
+            hw_p = st.number_input("HW Raw Score (%)", 0.0, 100.0, 99.3)
+            att_p = st.number_input("Attendance Raw Score (%)", 0.0, 100.0, 67.2)
             
-            # حساب أسوأ وأحسن الحالات (نفرض هامش 15% تأثر بالكيرف)
-            worst_att_hw = att_hw_raw * 0.85 
-            best_att_hw = min(14.0, att_hw_raw * 1.15)
+            # حساب الأوزان (الاختبارات ثابتة، والواجبات والحضور متغيرة)
+            major_total = (m1_p * 0.28) + (m2_p * 0.28) + (final_p * 0.30)
             
-            # حساب المجموع
-            total_worst = major1 + major2 + final_exam + worst_att_hw
-            total_best = major1 + major2 + final_exam + best_att_hw
+            # تطبيق هامش الكيرف على الواجبات والحضور (السيناريو الحالي)
+            curve_factor = st.slider("Normalization/Curve Impact (%)", -10, 10, 0, help="Drag left if curve was harsh, right if generous.")
+            att_hw_total = ((hw_p * 0.10) + (att_p * 0.04)) * (1 + curve_factor/100)
             
-            # دالة لتحويل المجموع إلى قريد
+            total_score = major_total + att_hw_total
+            
+            # دالة القريد
             def get_grade(score):
                 if score >= 95.0: return "A+"
                 elif score >= 86.0: return "A"
@@ -362,16 +364,10 @@ elif menu == "Course Resources & Grade Calculator 📚":
                 elif score >= 76.0: return "B"
                 elif score >= 71.0: return "C+"
                 elif score >= 65.0: return "C"
-                elif score >= 60.0: return "D+"
-                elif score >= 55.0: return "D"
                 else: return "F"
 
-            st.markdown("#### 🎯 Expected Results:")
-            col_a, col_b = st.columns(2)
-            col_a.metric("Worst Case (Low Curve)", f"{total_worst:.1f}", get_grade(total_worst))
-            col_b.metric("Best Case (High Curve)", f"{total_best:.1f}", get_grade(total_best))
-            
-            st.caption("*Best/Worst cases estimate the impact of normalization on your Attendance & HW.*")
+            st.markdown("#### 🎯 Your Calculated Total")
+            st.metric("Final Score", f"{total_score:.1f} / 100", get_grade(total_score))
 # Footer / Credits
 # ==========================================
 st.markdown("<br><br>", unsafe_allow_html=True)
