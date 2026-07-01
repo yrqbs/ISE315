@@ -318,7 +318,7 @@ elif menu == "Course Resources 📚":
     st.link_button("Home work",'')
     st.link_button("📖 Textbook", "رابط_الكتاب")
     st.link_button("📝 Formula Sheet", "رابط_الفورملا")
-    st.link_button('All Resources','')
+    st.link_button('All Resources','https://drive.google.com/drive/folders/1bzneQWBdPb00j2qNSZgLXlQ3GYdcgyzU')
 # ==========================================
 # 6. Course Resources & Grade Calculator
 # ==========================================
@@ -357,26 +357,29 @@ elif menu == "Grade Calculator 🧮":
         grade, feedback, color = get_grade_details(total)
         
         # العرض البصري الجميل
+       # التعديل: استخدام ألوان متوافقة مع الـ Dark Mode
+        # استخدمنا ألوان متباينة (Contrast) مع خلفية داكنة خفيفة
         st.markdown(f"""
-        <div style="background-color: #f0f2f6; padding: 20px; border-radius: 10px; text-align: center;">
-            <h2 style="color: {color};">Total Score: {total:.1f} / 100</h2>
-            <h1>Grade: {grade}</h1>
-            <p style="font-style: italic;">{feedback}</p>
+        <div style="
+            background-color: #262730; 
+            padding: 25px; 
+            border-radius: 15px; 
+            text-align: center; 
+            border: 1px solid #4a4a4a;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+            
+            <p style="color: #ffffff; font-size: 18px; margin-bottom: 5px;">Total Score</p>
+            <h1 style="color: {color}; font-size: 45px; margin: 0;">{total:.1f} / 100</h1>
+            <h2 style="color: #ffffff; margin-top: 10px;">Grade: {grade}</h2>
+            <p style="color: #cccccc; font-style: italic; margin-top: 10px;">{feedback}</p>
         </div>
         """, unsafe_allow_html=True)
-        
         # شريط تقدم (Progress Bar)
         st.progress(min(total/100, 1.0))
         
         st.write("---")
         # الـ Z-Score الاختياري
-        with st.expander("📊 Check your Z-Score (Optional)"):
-            raw = st.number_input("Raw Score", 0.0, 100.0, float(total))
-            avg = st.number_input("Section Mean", 0.0, 100.0, 70.0)
-            std = st.number_input("Std Dev", 0.1, 20.0, 5.0)
-            z = (raw-avg)/std
-            st.metric("Z-Score Result", f"{z:.2f}")
-            if z > 1: st.write("You are in the top tier of your section! 🚀")
+      
 # Footer / Credits
 # ==========================================
 st.markdown("<br><br>", unsafe_allow_html=True)
